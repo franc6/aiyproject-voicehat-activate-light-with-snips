@@ -1,0 +1,10 @@
+[Unit]
+Description=Turn on light with snips activation
+After=mutli-user.target
+
+[Service]
+Type=idle
+ExecStart=/usr/bin/python3 /home/pi/snips.lights.py 2>&1 >/dev/null
+
+[Install]
+WantedBy=multi-user.target
