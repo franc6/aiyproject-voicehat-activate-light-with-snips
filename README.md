@@ -37,3 +37,4 @@ Now, when you activate snips, the LED on your voicekit will light.  It will go
 out after snips has recorded your command.  The light is triggered from
 hermes/intent/asr/startListening and hermes/intent/asr/stopListening.
 
+[![Buy me some pizza](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/qpunYPZx5)
