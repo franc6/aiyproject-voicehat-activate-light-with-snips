@@ -15,6 +15,10 @@ import paho.mqtt.client as mqtt
 HOST = 'localhost'
 PORT = 1883
 
+# Specify the username and password for the connection
+USERNAME = ''
+PASSWORD = ''
+
 # Place your satellite's siteId here.  See bind setting in the
 # [snips-audio-server] section of snips.toml.  Don't include the @mqtt part!
 THIS_SITE = "default"
@@ -53,6 +57,7 @@ def start_listening(client, userdata, msg):
     turns the LED on.
     """
     del userdata
+
     payload = json.loads(msg.payload.decode('utf-8'))
     if payload is not None and \
        payload.get('siteId') is not None and \
@@ -95,6 +100,8 @@ def main():
 
     client.message_callback_add("hermes/asr/stopListening", stop_listening)
     client.message_callback_add("hermes/asr/startListening", start_listening)
+    if USERNAME is not None and PASSWORD is not None:
+        client.username_pw_set(username=USERNAME, password=PASSWORD)
 
     client.light_is_on = False
     client.connect(HOST, PORT, 60)
