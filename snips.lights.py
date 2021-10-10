@@ -1,6 +1,7 @@
 """Quick python script to turn the LED of a Google aiyproject-voicehat
 on or off when snips is listening."""
 from functools import partial
+from datetime import datetime
 import json
 
 # If you didn't install the python module, uncomment the next two lines
@@ -25,6 +26,7 @@ THIS_SITE = "default"
 
 mqtt.Client.light_is_on = False
 mqtt.Client.is_connected = False
+mqtt.Client.press_time = datetime.now()
 
 RPi.GPIO.setwarnings(False)
 LED = aiy.voicehat.get_led()
@@ -33,9 +35,12 @@ BUTTON = aiy.voicehat.get_button()
 def button_pressed(client):
     """Fakes hotword detection for snips"""
     if client.is_connected:
-        hotword = {"site_id": THIS_SITE, "model_id": "/usr/lib/rhasspy/usr/local/lib/python3.7/site-packages/pvporcupine/resources/keyword_files/raspberry-pi/hey google_raspberry-pi.ppn", "model_version": "", "model_type": "personal", "currentSensitivity": 0.5, "session_id": None, "send_audio_captured": None, "lang": None, "custom_entities": None}
-        payload = json.dumps(hotword)
-        client.publish("hermes/hotword/hey google_raspberry-pi/detected", payload)
+        last_press = client.press_time
+        client.press_time = datetime.now()
+        if (client.press_time - last_press).seconds >= 5:
+            hotword = {"site_id": THIS_SITE, "model_id": "/usr/lib/rhasspy/usr/local/lib/python3.7/site-packages/pvporcupine/resources/keyword_files/raspberry-pi/hey google_raspberry-pi.ppn", "model_version": "", "model_type": "personal", "currentSensitivity": 0.5, "session_id": None, "send_audio_captured": None, "lang": None, "custom_entities": None}
+            payload = json.dumps(hotword)
+            client.publish("hermes/hotword/hey google_raspberry-pi/detected", payload)
 
 def light_on(client):
     """Turns the LED on if it's not already on"""
