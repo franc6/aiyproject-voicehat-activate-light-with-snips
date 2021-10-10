@@ -33,9 +33,9 @@ BUTTON = aiy.voicehat.get_button()
 def button_pressed(client):
     """Fakes hotword detection for snips"""
     if client.is_connected:
-        hey_snips = {"siteId": THIS_SITE, "modelId":"hey_snips", "modelVersion": "hey_snips-3.1_2018-04-13T15:27:35_model_0019", "modelType": "universal", "currentSensitivity": 0.5}
-        payload = json.dumps(hey_snips)
-        client.publish("hermes/hotword/default/detected", payload)
+        hotword = {"site_id": THIS_SITE, "model_id": "/usr/lib/rhasspy/usr/local/lib/python3.7/site-packages/pvporcupine/resources/keyword_files/raspberry-pi/hey google_raspberry-pi.ppn", "model_version": "", "model_type": "personal", "currentSensitivity": 0.5, "session_id": None, "send_audio_captured": None, "lang": None, "custom_entities": None}
+        payload = json.dumps(hotword)
+        client.publish("hermes/hotword/hey google_raspberry-pi/detected", payload)
 
 def light_on(client):
     """Turns the LED on if it's not already on"""
